@@ -18,11 +18,11 @@ export default function Home() {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Determine API Base URL
-  const API_BASE_URL = process.env.NODE_ENV === "development"
-      ? "http://localhost:5000/api"
-      : "https://mm-zlrf.onrender.com";
-
+  // Set API Base URL Correctly
+  const API_BASE_URL =
+      process.env.NODE_ENV === "development"
+          ? "http://localhost:5000"
+          : "https://mm-zlrf.onrender.com";
 
   useEffect(() => {
     if (session?.user?.email) {
@@ -33,32 +33,39 @@ export default function Home() {
             localStorage.setItem("userData", JSON.stringify(res.data));
             router.push("/idcard");
           })
-          .catch(() => setUserData(null))
+          .catch((error) => {
+            console.error("Error fetching ID card:", error);
+            setUserData(null);
+          })
           .finally(() => setLoading(false));
     } else {
       setLoading(false);
     }
   }, [session, router, API_BASE_URL]);
 
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!session?.user?.email) {
+      alert("Please sign in first!");
+      return;
+    }
+
     try {
-      await axios.post(`${API_BASE_URL}/api/onboard`, {
+      const response = await axios.post(`${API_BASE_URL}/api/onboard`, {
         ...formData,
         email: session.user.email,
       });
 
       alert("User onboarded successfully!");
-      setUserData(formData);
-      localStorage.setItem("userData", JSON.stringify(formData));
+      setUserData(response.data);
+      localStorage.setItem("userData", JSON.stringify(response.data));
       router.push("/idcard");
     } catch (error) {
+      console.error("Onboarding error:", error);
       alert(error.response?.data?.error || "Error onboarding user");
     }
   };
@@ -76,56 +83,61 @@ export default function Home() {
               <p>Welcome, {session.user.name}!</p>
               <button onClick={() => signOut()}>Sign Out</button>
 
-              <h2>Fill Your Details</h2>
-              <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    name="name"
-                    placeholder="Full Name"
-                    onChange={handleChange}
-                    required
-                />
-                <br />
-                <input
-                    type="text"
-                    name="fatherName"
-                    placeholder="Father's Name"
-                    onChange={handleChange}
-                    required
-                />
-                <br />
-                <input
-                    type="text"
-                    name="address"
-                    placeholder="Address"
-                    onChange={handleChange}
-                    required
-                />
-                <br />
-                <input
-                    type="date"
-                    name="dob"
-                    placeholder="Date of Birth"
-                    onChange={handleChange}
-                    required
-                />
-                <br />
-                <input
-                    type="text"
-                    name="occupation"
-                    placeholder="Occupation"
-                    onChange={handleChange}
-                    required
-                />
-                <br />
-                <select name="gender" onChange={handleChange} required>
-                  <option value="">Select Gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                </select>
-                <br />
-                <button type="submit">Submit</button>
-              </form>
+              {!userData ? (
+                  <>
+                    <h2>Fill Your Details</h2>
+                    <form onSubmit={handleSubmit}>
+                      <input
+                          type="text"
+                          name="name"
+                          placeholder="Full Name"
+                          onChange={handleChange}
+                          required
+                      />
+                      <br />
+                      <input
+                          type="text"
+                          name="fatherName"
+                          placeholder="Father's Name"
+                          onChange={handleChange}
+                          required
+                      />
+                      <br />
+                      <input
+                          type="text"
+                          name="address"
+                          placeholder="Address"
+                          onChange={handleChange}
+                          required
+                      />
+                      <br />
+                      <input
+                          type="date"
+                          name="dob"
+                          onChange={handleChange}
+                          required
+                      />
+                      <br />
+                      <input
+                          type="text"
+                          name="occupation"
+                          placeholder="Occupation"
+                          onChange={handleChange}
+                          required
+                      />
+                      <br />
+                      <select name="gender" onChange={handleChange} required>
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                      </select>
+                      <br />
+                      <button type="submit">Submit</button>
+                    </form>
+                  </>
+              ) : (
+                  <p>Your ID Card is ready! Redirecting...</p>
+              )}
             </>
         )}
       </div>
