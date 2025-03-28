@@ -19,8 +19,8 @@ export default function IDCard() {
     }, [router]);
 
     const handleLogout = () => {
-        localStorage.removeItem("userData"); // Clear stored data
-        signOut(); // Sign out from NextAuth
+        localStorage.removeItem("userData");
+        signOut();
     };
 
     const handleDownload = async () => {
@@ -43,26 +43,46 @@ export default function IDCard() {
         <div style={{ textAlign: "center", marginTop: "50px" }}>
             <h2>ID Card</h2>
 
-            {/* ID Card */}
-            <div ref={cardRef} style={{
-                border: "2px solid black",
-                padding: "20px",
-                width: "300px",
-                margin: "auto",
-                backgroundColor: "#fff"
-            }}>
-                <p><strong>Name:</strong> {userData.name}</p>
-                <p><strong>Father&rsquo;s Name:</strong> {userData.fatherName}</p>
-                <p><strong>Email:</strong> {userData.email}</p>
-                <p><strong>Address:</strong> {userData.address}</p>
-                <p><strong>DOB:</strong> {userData.dob}</p>
-                <p><strong>Occupation:</strong> {userData.occupation}</p>
-                <p><strong>Gender:</strong> {userData.gender}</p>
+            <div
+                ref={cardRef}
+                style={{
+                    border: "2px solid black",
+                    padding: "20px",
+                    width: "300px",
+                    margin: "auto",
+                    backgroundColor: "#fff",
+                }}
+            >
+                <p>
+                    <strong>Name:</strong> {userData.name}
+                </p>
+                <p>
+                    <strong>Father’s Name:</strong> {userData.fatherName}
+                </p>
+                <p>
+                    <strong>Email:</strong> {userData.email}
+                </p>
+                <p>
+                    <strong>Address:</strong> {userData.address}
+                </p>
+                <p>
+                    <strong>DOB:</strong> {userData.dob}
+                </p>
+                <p>
+                    <strong>Occupation:</strong> {userData.occupation}
+                </p>
+                <p>
+                    <strong>Gender:</strong> {userData.gender}
+                </p>
             </div>
 
             <button onClick={() => router.push("/")}>Go Back</button>
-            <button onClick={handleDownload} style={{ marginLeft: "10px", backgroundColor: "green", color: "white" }}>Download ID Card</button>
-            <button onClick={handleLogout} style={{ marginLeft: "10px", backgroundColor: "red", color: "white" }}>Logout</button>
+            <button onClick={handleDownload} style={{ marginLeft: "10px", backgroundColor: "green", color: "white" }}>
+                Download ID Card
+            </button>
+            <button onClick={handleLogout} style={{ marginLeft: "10px", backgroundColor: "red", color: "white" }}>
+                Logout
+            </button>
         </div>
     );
 }

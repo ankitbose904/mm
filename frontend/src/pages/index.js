@@ -1,7 +1,7 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useRouter } from "next/router"; // If using Next.js 13+, replace with: import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -18,13 +18,8 @@ export default function Home() {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Set API Base URL Correctly
-  const API_BASE_URL =
-      process.env.NODE_ENV === "development"
-          ? "http://localhost:5000"
-          : "https://mm-zlrf.onrender.com";
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://mm-zlrf.onrender.com";
 
-  // Fetch ID Card Data if the user is logged in
   useEffect(() => {
     if (session?.user?.email) {
       axios
@@ -41,21 +36,18 @@ export default function Home() {
     } else {
       setLoading(false);
     }
-  }, [session, router]); // ✅ Removed API_BASE_URL from dependencies to prevent re-renders
+  }, [session, router]);
 
-  // Redirect to ID card page when data is available
   useEffect(() => {
     if (userData) {
       router.push("/idcard");
     }
   }, [userData, router]);
 
-  // Handle input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle Form Submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!session?.user?.email) {
@@ -82,7 +74,7 @@ export default function Home() {
 
   return (
       <div style={{ textAlign: "center", marginTop: "50px" }}>
-        <h1>Mukti-Morcha🌟🌟</h1>
+        <h1>Mukti-Morcha 🌟</h1>
 
         {!session ? (
             <button onClick={() => signIn("google")}>Sign in with Google</button>
@@ -95,56 +87,17 @@ export default function Home() {
                   <>
                     <h2>Fill Your Details</h2>
                     <form onSubmit={handleSubmit}>
-                      <input
-                          type="text"
-                          name="name"
-                          placeholder="Full Name"
-                          value={formData.name}
-                          onChange={handleChange}
-                          required
-                      />
+                      <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} required />
                       <br />
-                      <input
-                          type="text"
-                          name="fatherName"
-                          placeholder="Father's Name"
-                          value={formData.fatherName}
-                          onChange={handleChange}
-                          required
-                      />
+                      <input type="text" name="fatherName" placeholder="Father's Name" value={formData.fatherName} onChange={handleChange} required />
                       <br />
-                      <input
-                          type="text"
-                          name="address"
-                          placeholder="Address"
-                          value={formData.address}
-                          onChange={handleChange}
-                          required
-                      />
+                      <input type="text" name="address" placeholder="Address" value={formData.address} onChange={handleChange} required />
                       <br />
-                      <input
-                          type="date"
-                          name="dob"
-                          value={formData.dob}
-                          onChange={handleChange}
-                          required
-                      />
+                      <input type="date" name="dob" value={formData.dob} onChange={handleChange} required />
                       <br />
-                      <input
-                          type="text"
-                          name="occupation"
-                          placeholder="Occupation"
-                          value={formData.occupation}
-                          onChange={handleChange}
-                          required
-                      />
+                      <input type="text" name="occupation" placeholder="Occupation" value={formData.occupation} onChange={handleChange} required />
                       <br />
-                      <select
-                          name="gender"
-                          value={formData.gender}
-                          onChange={handleChange}
-                          required
-                      >
+                      <select name="gender" value={formData.gender} onChange={handleChange} required>
                         <option value="">Select Gender</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
