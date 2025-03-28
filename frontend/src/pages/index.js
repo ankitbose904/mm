@@ -21,7 +21,7 @@ export default function Home() {
   // Determine API Base URL
   const API_BASE_URL = process.env.NODE_ENV === "development"
       ? "http://localhost:5000/api"
-      : "https://id-card-js2f.onrender.com/api";
+      : "https://mm-zlrf.onrender.com/api";
 
 
   useEffect(() => {

@@ -7,7 +7,7 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "https://mm-five-murex.vercel.app/"],
     methods: ["GET", "POST"],
     credentials: true
 }));
@@ -19,7 +19,7 @@ mongoose.connect(process.env.MONGO_URI, {
 }).then(() => console.log("MongoDB Connected"))
     .catch(err => console.error("MongoDB Connection Error:", err));
 
-// ✅ User Schema
+
 const UserSchema = new mongoose.Schema({
     name: String,
     fatherName: String,
@@ -44,7 +44,7 @@ app.get("/api/idcard", async (req, res) => {
 
         res.json(user);
     } catch (error) {
-        console.error("❌ Error fetching user:", error);
+        console.error("Error fetching user:", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
@@ -74,7 +74,7 @@ app.post("/api/onboard", async (req, res) => {
 
         res.status(201).json({ message: "User onboarded successfully" });
     } catch (error) {
-        console.error("❌ Error onboarding user:", error);
+        console.error("Error onboarding user:", error);
 
         if (error.code === 11000) {
             return res.status(400).json({ error: "Email already exists" });
@@ -86,4 +86,4 @@ app.post("/api/onboard", async (req, res) => {
 
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
