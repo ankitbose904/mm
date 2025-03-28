@@ -52,14 +52,13 @@ export default function IDCard() {
                 backgroundColor: "#fff"
             }}>
                 <p><strong>Name:</strong> {userData.name}</p>
-                <p><strong>Father's Name:</strong> {userData.fatherName}</p>
+                <p><strong>Father&rsquo;s Name:</strong> {userData.fatherName}</p>
                 <p><strong>Email:</strong> {userData.email}</p>
                 <p><strong>Address:</strong> {userData.address}</p>
                 <p><strong>DOB:</strong> {userData.dob}</p>
                 <p><strong>Occupation:</strong> {userData.occupation}</p>
                 <p><strong>Gender:</strong> {userData.gender}</p>
             </div>
-
 
             <button onClick={() => router.push("/")}>Go Back</button>
             <button onClick={handleDownload} style={{ marginLeft: "10px", backgroundColor: "green", color: "white" }}>Download ID Card</button>
