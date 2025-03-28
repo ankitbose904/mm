@@ -21,13 +21,13 @@ export default function Home() {
   // Determine API Base URL
   const API_BASE_URL = process.env.NODE_ENV === "development"
       ? "http://localhost:5000/api"
-      : "https://mm-zlrf.onrender.com/api";
+      : "https://mm-zlrf.onrender.com";
 
 
   useEffect(() => {
     if (session?.user?.email) {
       axios
-          .get(`${API_BASE_URL}/idcard?email=${session.user.email}`)
+          .get(`${API_BASE_URL}/api/idcard?email=${session.user.email}`)
           .then((res) => {
             setUserData(res.data);
             localStorage.setItem("userData", JSON.stringify(res.data));
@@ -49,7 +49,7 @@ export default function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${API_BASE_URL}/onboard`, {
+      await axios.post(`${API_BASE_URL}/api/onboard`, {
         ...formData,
         email: session.user.email,
       });
